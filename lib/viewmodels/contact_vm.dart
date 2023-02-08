@@ -30,7 +30,6 @@ class ContactViewModel {
     for (String key in contactsMap.keys){
       contactList.add(Contact.deserialize(contactsMap[key]!));
     }
-    print(contactsMap);
     return contactList;
   }
 

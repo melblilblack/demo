@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:untitled/pages/contact_list.dart';
 import 'package:untitled/viewmodels/contact_vm.dart';
