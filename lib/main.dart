@@ -4,7 +4,9 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/pages/contact_list.dart';
+import 'package:untitled/pages/dashboard_page.dart';
 import 'package:untitled/pages/edit_page.dart';
+import 'package:untitled/pages/setting.dart';
 import 'package:untitled/viewmodels/contact_vm.dart';
 import 'package:untitled/main.config.dart';
 
@@ -26,7 +28,14 @@ void configureDependencies() => initial(getIt);
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: <AutoRoute>[
-    AutoRoute(page: ContactListPage, initial: true),
+    AutoRoute(
+        page: DashboardPage,
+        children: [
+          AutoRoute(path: 'Contacts', page: ContactListPage),
+          AutoRoute(path: 'Settings', page: SettingPage),
+        ],
+        initial: true
+    ),
     AutoRoute(page: EditPage),
   ],
 )

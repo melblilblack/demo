@@ -88,7 +88,7 @@ class _EditPageState extends State<EditPage> {
               readOnly: read!,
             ),
           ),
-          read! ? Expanded(
+          !read! ? Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(

@@ -7,7 +7,9 @@ import 'package:untitled/viewmodels/contact_vm.dart';
 import '../main.gr.dart';
 
 class ContactListPage extends StatelessWidget {
-  const ContactListPage({super.key});
+
+  final double size;
+  const ContactListPage(this.size, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +46,18 @@ class ContactListPage extends StatelessWidget {
                         onTap: () {
                           AutoRouter.of(context).push(EditRoute(contact: contact));
                         },
-                        title: Text(contact.name),
-                        subtitle: Text('Number: ${contact.number}'),
+                        title: Text(
+                          contact.name,
+                          style: TextStyle(
+                            fontSize: size,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Number: ${contact.number}',
+                          style: TextStyle(
+                            fontSize: size,
+                          ),
+                        ),
                       ),
                     ),
                   );
