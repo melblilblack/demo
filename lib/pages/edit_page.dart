@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:untitled/viewmodels/contact_vm.dart';
@@ -11,20 +12,16 @@ class EditPage extends StatefulWidget {
   bool get isEditing => contact != null;
   final _nameController = TextEditingController();
   final _numberController = TextEditingController();
-  late bool read;
 
-  EditPage({this.contact, len}) {
+  EditPage({super.key, this.contact, len}) {
     if (isEditing) {
       _nameController.text = contact!.name;
       _numberController.text = contact!.number;
-      this.index = contact!.id;
-      this.read = true;
+      index = contact!.id;
     }
     else{
-      this.index = len;
-      this.read = false;
+      index = len;
     }
-
   }
 
   @override
@@ -33,37 +30,38 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
 
-
-  ContactViewModel get _vm => GetIt.I<ContactViewModel>();
+  bool? read;
+  final ContactViewModel _vm = GetIt.I<ContactViewModel>();
 
   @override
   Widget build(BuildContext context) {
+    read = read ?? widget.isEditing;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detail'),
+        title: const Text('Detail'),
         actions: <Widget>[
           widget.isEditing ? Row(
             children: [
-              widget.read ? IconButton(
-                icon: Icon(Icons.edit),
+              read! ? IconButton(
+                icon: const Icon(Icons.edit),
                 onPressed: () {
                   setState(() {
-                    widget.read = false;
+                    read = false;
                   });
                 },
               ) : IconButton(
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
                 onPressed: () {
                   setState(() {
-                    widget.read = true;
+                    read = true;
                   });
                 },
               ),
               IconButton(
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: () {
                   _vm.removeContact(widget.contact!.id);
-                  Navigator.of(context).pop();
+                  context.router.pop();
                 },
               ),
             ],
@@ -72,48 +70,48 @@ class _EditPageState extends State<EditPage> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Padding(
             padding: const EdgeInsets.fromLTRB(20,10,20,0),
             child: TextField(
               controller: widget._nameController,
-              decoration: InputDecoration(hintText: 'Name'),
-              readOnly: widget.read,
+              decoration: const InputDecoration(hintText: 'Name'),
+              readOnly: read!,
             ),
           ),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           Padding(
             padding: const EdgeInsets.fromLTRB(20,10,20,0),
             child: TextField(
               controller: widget._numberController,
-              decoration: InputDecoration(hintText: 'Number'),
-              readOnly: widget.read,
+              decoration: const InputDecoration(hintText: 'Number'),
+              readOnly: read!,
             ),
           ),
-          !widget.read ? Expanded(
+          read! ? Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size.fromHeight(
+                    minimumSize: const Size.fromHeight(
                         40), // fromHeight use double.infinity as width and 40 is the height
                   ),
                   onPressed: () {
                     if (widget._nameController.text != '') {
-                      final contact = Contact(this.widget.index, widget._nameController.text,
+                      final contact = Contact(widget.index, widget._nameController.text,
                           widget._numberController.text);
                       if (widget.isEditing) {
                         _vm.updateContact(contact);
                       } else {
                         _vm.addContact(contact);
                       }
-                      Navigator.of(context).pop();
+                      context.router.pop();
                     }else{
-                      showAlertDialog(context);
+                      showAlertDialog(context, context.router);
                     }
 
                   },
-                  child: Text('Save'),
+                  child: const Text('Save'),
               ),
             ),
           ) : Container(),
@@ -123,19 +121,19 @@ class _EditPageState extends State<EditPage> {
   }
 }
 
-showAlertDialog(context) {
+showAlertDialog(context, router) {
   // Create button
   Widget okButton = TextButton(
-    child: Text("OK"),
+    child: const Text("OK"),
     onPressed: () {
-      Navigator.of(context).pop();
+      router.pop();
     },
   );
 
   // Create AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Error"),
-    content: Text("Name cannot be empty"),
+    title: const Text("Error"),
+    content: const Text("Name cannot be empty"),
     actions: [
       okButton,
     ],

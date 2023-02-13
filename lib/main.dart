@@ -1,39 +1,60 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/pages/contact_list.dart';
+import 'package:untitled/pages/edit_page.dart';
 import 'package:untitled/viewmodels/contact_vm.dart';
+import 'package:untitled/main.config.dart';
 
-void setupLocator(){
-  GetIt.I.registerLazySingleton(() => ContactViewModel());
-}
+import 'main.gr.dart';
+
+// void setupLocator(){
+//   GetIt.I.registerLazySingleton(() => ContactViewModel());
+// }
+
+final getIt = GetIt.instance;
+
+@InjectableInit(
+  initializerName: 'initial', // default
+  preferRelativeImports: true, // default
+  asExtension: false, // default
+)
+void configureDependencies() => initial(getIt);
+
+@MaterialAutoRouter(
+  replaceInRouteName: 'Page,Route',
+  routes: <AutoRoute>[
+    AutoRoute(page: ContactListPage, initial: true),
+    AutoRoute(page: EditPage),
+  ],
+)
+class $AppRouter {}
 
 void main() {
-  setupLocator();
-
-  runApp(const MyApp());
+  // setupLocator();
+  configureDependencies();
+  ContactViewModel vm = GetIt.I<ContactViewModel>();
+  runApp(
+      ChangeNotifierProvider(
+          create: (context) => vm,
+          child: MyApp()
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+  final _appRouter = AppRouter();
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: ContactList(),
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }

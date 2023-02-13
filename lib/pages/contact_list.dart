@@ -1,12 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/models/contact.dart';
-import 'package:untitled/pages/edit_page.dart';
 import 'package:untitled/viewmodels/contact_vm.dart';
 
-class ContactList extends StatelessWidget {
+import '../main.gr.dart';
 
-  ContactViewModel get _vm => GetIt.I<ContactViewModel>();
+class ContactListPage extends StatelessWidget {
+  const ContactListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +15,11 @@ class ContactList extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Contact List"),
       ),
-      body: StreamBuilder<List<Contact>>(
-        stream: _vm.outContactList,
-        builder: (content, snapshot) {
+      body: Consumer<ContactViewModel>(
+        builder: (context, contactVM, child) {
+          List<Contact> contacts = contactVM.contacts;
 
-          if (!snapshot.hasData) {
+          if (contacts.isEmpty) {
             return Column(
               children: [
                 showAddButton(context, 0),
@@ -26,26 +27,22 @@ class ContactList extends StatelessWidget {
             );
           }
 
-
-          final contacts = snapshot.data;
-          final length = contacts != null ? contacts.length : 0;
-
           return Column(
             children: [
               ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: contacts?.length,
+                itemCount: contacts.length,
                 itemBuilder: (context, index) {
 
-                  final contact = contacts![index];
+                  final contact = contacts[index];
 
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(10,10,10,0),
                     child: Card(
                       child: ListTile(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => EditPage(contact: contact)));
+                          AutoRouter.of(context).push(EditRoute(contact: contact));
                         },
                         title: Text(contact.name),
                         subtitle: Text('Number: ${contact.number}'),
@@ -54,7 +51,7 @@ class ContactList extends StatelessWidget {
                   );
                 },
               ),
-              showAddButton(context, length),
+              showAddButton(context, contacts.length),
             ],
           );
         },
@@ -72,7 +69,7 @@ showAddButton(context, index){
           minimumSize: const Size.fromHeight(40), // fromHeight use double.infinity as width and 40 is the height
         ),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => EditPage(len: index)));
+          AutoRouter.of(context).push(EditRoute(len: index));
         },
         child: const Text('add'),
       ),
