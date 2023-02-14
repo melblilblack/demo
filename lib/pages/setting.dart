@@ -5,32 +5,55 @@ import 'package:untitled/main.gr.dart';
 class SettingPage extends StatefulWidget {
 
   final double size;
-  final _sizeController = TextEditingController();
 
-  SettingPage(this.size, {super.key}){
-    _sizeController.text = size.toString();
-  }
+  SettingPage(this.size, {super.key});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
+  double? _currentSliderValue;
 
   @override
   Widget build(BuildContext context) {
+    _currentSliderValue =_currentSliderValue ?? widget.size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Font Size Setting"),
+        title: const Text("Setting"),
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20,10,20,0),
-            child: TextField(
-              controller: widget._sizeController,
-              decoration: const InputDecoration(hintText: 'Font Size'),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Select font size",
+                style: TextStyle(
+                  fontSize: 18
+                ),
+              ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20,10,20,10),
+            child: Slider(
+              value: _currentSliderValue!,
+              min: 5,
+              max: 30,
+              divisions: 5,
+              label: _currentSliderValue!.round().toString(),
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value;
+                });
+              },
+            ),
+            // TextField(
+            //   controller: widget._sizeController,
+            //   decoration: const InputDecoration(hintText: 'Font Size'),
+            // ),
           ),
           Expanded(
             child: Align(
@@ -40,12 +63,8 @@ class _SettingPageState extends State<SettingPage> {
                   minimumSize: const Size.fromHeight(40), // fromHeight use double.infinity as width and 40 is the height
                 ),
                 onPressed: () {
-                  if (widget._sizeController.text != '') {
-                    AutoRouter.of(context).navigate(ContactListRoute(
-                        size: double.parse(widget._sizeController.text)));
-                  }else{
-                    showAlertDialog(context, AutoRouter.of(context));
-                  }
+                  AutoRouter.of(context).navigate(ContactListRoute(
+                      size: double.parse(_currentSliderValue!.toString())));
                 },
                 child: const Text('Save'),
               ),
@@ -55,31 +74,4 @@ class _SettingPageState extends State<SettingPage> {
       ),
     );
   }
-}
-
-showAlertDialog(context, router) {
-  // Create button
-  Widget okButton = TextButton(
-    child: const Text("OK"),
-    onPressed: () {
-      router.pop();
-    },
-  );
-
-  // Create AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: const Text("Error"),
-    content: const Text("Font size cannot be empty"),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }
