@@ -31,37 +31,40 @@ class ContactListPage extends StatelessWidget {
 
           return Column(
             children: [
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: contacts.length,
-                itemBuilder: (context, index) {
+              Expanded(
+                flex: 8,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: contacts.length,
+                  itemBuilder: (context, index) {
 
-                  final contact = contacts[index];
+                    final contact = contacts[index];
 
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(10,10,10,0),
-                    child: Card(
-                      child: ListTile(
-                        onTap: () {
-                          AutoRouter.of(context).push(EditRoute(contact: contact));
-                        },
-                        title: Text(
-                          contact.name,
-                          style: TextStyle(
-                            fontSize: size,
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(10,10,10,0),
+                      child: Card(
+                        child: ListTile(
+                          onTap: () {
+                            AutoRouter.of(context).push(EditRoute(contact: contact));
+                          },
+                          title: Text(
+                            contact.name,
+                            style: TextStyle(
+                              fontSize: size,
+                            ),
                           ),
-                        ),
-                        subtitle: Text(
-                          'Number: ${contact.number}',
-                          style: TextStyle(
-                            fontSize: size,
+                          subtitle: Text(
+                            'Number: ${contact.number}',
+                            style: TextStyle(
+                              fontSize: size,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
               showAddButton(context, contacts.length),
             ],
