@@ -45,23 +45,15 @@ class AppRouter extends _i5.RootStackRouter {
       );
     },
     ContactListRoute.name: (routeData) {
-      final args = routeData.argsAs<ContactListRouteArgs>();
       return _i5.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i3.ContactListPage(
-          args.size,
-          key: args.key,
-        ),
+        child: const _i3.ContactListPage(),
       );
     },
     SettingRoute.name: (routeData) {
-      final args = routeData.argsAs<SettingRouteArgs>();
       return _i5.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i4.SettingPage(
-          args.size,
-          key: args.key,
-        ),
+        child: const _i4.SettingPage(),
       );
     },
   };
@@ -145,68 +137,24 @@ class EditRouteArgs {
 
 /// generated route for
 /// [_i3.ContactListPage]
-class ContactListRoute extends _i5.PageRouteInfo<ContactListRouteArgs> {
-  ContactListRoute({
-    required double size,
-    _i6.Key? key,
-  }) : super(
+class ContactListRoute extends _i5.PageRouteInfo<void> {
+  const ContactListRoute()
+      : super(
           ContactListRoute.name,
           path: 'Contacts',
-          args: ContactListRouteArgs(
-            size: size,
-            key: key,
-          ),
         );
 
   static const String name = 'ContactListRoute';
 }
 
-class ContactListRouteArgs {
-  const ContactListRouteArgs({
-    required this.size,
-    this.key,
-  });
-
-  final double size;
-
-  final _i6.Key? key;
-
-  @override
-  String toString() {
-    return 'ContactListRouteArgs{size: $size, key: $key}';
-  }
-}
-
 /// generated route for
 /// [_i4.SettingPage]
-class SettingRoute extends _i5.PageRouteInfo<SettingRouteArgs> {
-  SettingRoute({
-    required double size,
-    _i6.Key? key,
-  }) : super(
+class SettingRoute extends _i5.PageRouteInfo<void> {
+  const SettingRoute()
+      : super(
           SettingRoute.name,
           path: 'Settings',
-          args: SettingRouteArgs(
-            size: size,
-            key: key,
-          ),
         );
 
   static const String name = 'SettingRoute';
-}
-
-class SettingRouteArgs {
-  const SettingRouteArgs({
-    required this.size,
-    this.key,
-  });
-
-  final double size;
-
-  final _i6.Key? key;
-
-  @override
-  String toString() {
-    return 'SettingRouteArgs{size: $size, key: $key}';
-  }
 }

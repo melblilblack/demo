@@ -5,11 +5,11 @@ import 'package:untitled/models/contact.dart';
 import 'package:untitled/viewmodels/contact_vm.dart';
 
 import '../main.gr.dart';
+import '../theme.dart';
 
 class ContactListPage extends StatelessWidget {
 
-  final double size;
-  const ContactListPage(this.size, {super.key});
+  const ContactListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,24 +43,29 @@ class ContactListPage extends StatelessWidget {
 
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(10,10,10,0),
-                      child: Card(
-                        child: ListTile(
-                          onTap: () {
-                            AutoRouter.of(context).push(EditRoute(contact: contact));
-                          },
-                          title: Text(
-                            contact.name,
-                            style: TextStyle(
-                              fontSize: size,
+                      child: Consumer<AppTheme>(
+                        builder: (context, theme, child) {
+                          return Card(
+                            child: ListTile(
+                              onTap: () {
+                                AutoRouter.of(context).push(
+                                    EditRoute(contact: contact));
+                              },
+                              title: Text(
+                                contact.name,
+                                style: theme.theme
+                                    .textTheme
+                                    .bodyMedium,
+                              ),
+                              subtitle: Text(
+                                'Number: ${contact.number}',
+                                style: theme.theme
+                                    .textTheme
+                                    .bodyMedium,
+                              ),
                             ),
-                          ),
-                          subtitle: Text(
-                            'Number: ${contact.number}',
-                            style: TextStyle(
-                              fontSize: size,
-                            ),
-                          ),
-                        ),
+                          );
+                        }
                       ),
                     );
                   },

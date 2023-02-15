@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:untitled/main.gr.dart';
 
 class DashboardPage extends StatelessWidget {
-  final double size = 15;
 
   const DashboardPage({super.key});
   @override
@@ -12,9 +11,9 @@ class DashboardPage extends StatelessWidget {
       // list of your tab routes
       // routes used here must be declaraed as children
       // routes of /dashboard
-      routes: [
-        ContactListRoute(size: size),
-        SettingRoute(size: size),
+      routes: const [
+        ContactListRoute(),
+        SettingRoute(),
       ],
       builder: (context, child, animation) {
         // obtain the scoped TabsRouter controller using context
