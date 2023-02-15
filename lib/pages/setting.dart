@@ -6,7 +6,7 @@ class SettingPage extends StatefulWidget {
 
   final double size;
 
-  SettingPage(this.size, {super.key});
+  const SettingPage(this.size, {super.key});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
